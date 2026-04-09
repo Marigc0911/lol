@@ -1,0 +1,471 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--beige:#faf7f2;--blush:#f9e8ef;--blush2:#f2c4d4;--rose:#d4829a;--green2:#8fba88;--white:#fff;--text:#4a3f48;--muted:#9a8a96}
+  body{font-family:'Poppins',sans-serif;background:var(--beige);color:var(--text);min-height:100vh}
+  .wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem 3rem}
+  .hero{text-align:center;padding:1.5rem 1rem 1rem;background:linear-gradient(135deg,#fdf0f5,#f5f9f0);border-radius:24px;margin-bottom:1rem;border:1px solid #f0e0e8}
+  .hero h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--rose);margin-bottom:0.2rem}
+  .hero p{color:var(--muted);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase}
+  .always-bar{background:var(--white);border-radius:20px;border:1px solid #f0e4ec;padding:1.1rem 1.4rem;margin-bottom:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .always-label{font-size:0.72rem;color:var(--muted);font-weight:500;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px}
+  .streak-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose);font-weight:600;line-height:1}
+  .streak-unit{font-size:0.8rem;color:var(--muted)}
+  .sdots{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+  .sdot{width:14px;height:14px;border-radius:50%;background:#f0e4ec;border:1px solid #e8d8e4}
+  .sdot.done{background:var(--green2);border-color:#6aaa60}
+  .sdot.partial{background:var(--blush2);border-color:var(--rose)}
+  .progress-side{display:flex;flex-direction:column;gap:6px}
+  .wt-inputs{display:flex;gap:8px}
+  .wt-mini{flex:1}
+  .wt-mini label{font-size:0.68rem;color:var(--muted);display:block;margin-bottom:3px}
+  .wt-mini input{width:100%;padding:6px 8px;border:1.5px solid #f0e4ec;border-radius:10px;font-family:'Poppins',sans-serif;font-size:0.8rem;color:var(--text);background:var(--beige);outline:none;transition:border 0.2s}
+  .wt-mini input:focus{border-color:var(--blush2)}
+  .prog-bg{height:18px;border-radius:50px;background:#f0e4ec;overflow:hidden;margin-top:2px}
+  .prog-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#f4a7be,#8fba88);transition:width 0.8s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+  .prog-pct{font-size:0.65rem;color:#fff;font-weight:600}
+  .prog-msg{font-size:0.72rem;color:var(--muted);font-style:italic;margin-top:4px;line-height:1.4}
+  .tabs{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap}
+  .tab{padding:7px 18px;border-radius:50px;border:1.5px solid var(--blush2);background:var(--white);color:var(--rose);font-family:'Poppins',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+  .tab.active{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .section{display:none}.section.active{display:block}
+  .card{background:var(--white);border-radius:20px;padding:1.25rem 1.5rem;margin-bottom:1rem;border:1px solid #f0e4ec}
+  .card-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+  .flabel{font-size:0.8rem;color:var(--muted);font-weight:500;display:block;margin-bottom:4px;margin-top:10px}
+  input[type=text],input[type=number],textarea{width:100%;padding:10px 14px;border:1.5px solid #f0e4ec;border-radius:12px;font-family:'Poppins',sans-serif;font-size:0.82rem;color:var(--text);background:var(--beige);outline:none;transition:border 0.2s;resize:none}
+  input[type=text]:focus,input[type=number]:focus,textarea:focus{border-color:var(--blush2)}
+  .checklist{display:flex;flex-direction:column;gap:8px}
+  .check-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:var(--beige);cursor:pointer;transition:background 0.2s;user-select:none}
+  .check-item:hover{background:var(--blush)}
+  .check-item.done{background:#edf7eb}
+  .check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--green2);flex-shrink:0;cursor:pointer}
+  .check-label{font-size:0.82rem;color:var(--text)}
+  .check-item.done .check-label{color:var(--muted);text-decoration:line-through}
+  /* WATER BOTTLES */
+  .water-grid{display:flex;gap:16px;flex-wrap:wrap;margin-top:0.75rem;align-items:center}
+  .bottle-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;user-select:none}
+  .bottle{width:44px;height:80px;position:relative;transition:transform 0.15s}
+  .bottle:active{transform:scale(0.93)}
+  .bottle-label{font-size:0.7rem;color:var(--muted);font-weight:500}
+  .meal-block{border-radius:14px;padding:1rem;margin-bottom:0.75rem;border:1px solid #f0e4ec;background:var(--beige)}
+  .meal-title{font-size:0.85rem;font-weight:600;color:var(--rose);margin-bottom:4px}
+  .meal-guide{font-size:0.75rem;color:var(--muted);margin-bottom:8px;font-style:italic}
+  .mood-row{display:flex;gap:12px;flex-wrap:wrap}
+  .mood-col{flex:1;min-width:120px}
+  .radio-row{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+  .radio-pill{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:50px;border:1.5px solid #f0e4ec;cursor:pointer;font-size:0.8rem;background:var(--beige);transition:all 0.2s}
+  .radio-pill:hover{background:var(--blush)}
+  .radio-pill input{accent-color:var(--rose);width:14px;height:14px}
+  .workout-types{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .workout-type{padding:7px 14px;border-radius:50px;border:1.5px solid #f0e4ec;background:var(--beige);font-size:0.78rem;cursor:pointer;transition:all 0.2s;color:var(--text);user-select:none}
+  .workout-type:hover{background:var(--blush)}
+  .workout-type.sel{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .workout-entries{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .workout-entry{display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--beige);border-radius:12px;border:1px solid #f0e4ec}
+  .workout-entry-label{font-size:0.8rem;font-weight:500;color:var(--text);min-width:80px}
+  .workout-entry input{flex:1;padding:6px 10px;border:1.5px solid #f0e4ec;border-radius:10px;font-family:'Poppins',sans-serif;font-size:0.78rem;color:var(--text);background:var(--white);outline:none}
+  .workout-entry input:focus{border-color:var(--blush2)}
+  .workout-hint{font-size:0.72rem;color:var(--muted);margin-top:6px;font-style:italic}
+  .workout-summary{font-size:0.78rem;color:var(--rose);margin-top:8px;min-height:1.2em;font-weight:500}
+  .wt-row{display:flex;gap:12px;flex-wrap:wrap}
+  .wt-col{flex:1;min-width:110px}
+  .save-btn{display:block;width:100%;padding:13px;border-radius:50px;border:none;background:linear-gradient(135deg,#d4829a,#8fba88);color:#fff;font-family:'Poppins',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:1.5rem;letter-spacing:0.05em;transition:opacity 0.2s}
+  .save-btn:hover{opacity:0.88}
+  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--rose);color:#fff;padding:10px 24px;border-radius:50px;font-size:0.82rem;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:999;white-space:nowrap}
+  .toast.show{opacity:1}
+  .mini-stat{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
+  .mini-card{flex:1;min-width:100px;background:var(--blush);border-radius:14px;padding:12px 14px;border:1px solid #f0e4ec;text-align:center}
+  .mini-card .val{font-size:1.4rem;font-family:'Playfair Display',serif;color:var(--rose);font-weight:600}
+  .mini-card .lbl{font-size:0.7rem;color:var(--muted)}
+  .graph-area{height:160px;position:relative;margin-top:0.5rem}
+  canvas{width:100%!important;height:160px!important}
+  .streak-grid{display:flex;gap:5px;flex-wrap:wrap;margin-top:0.5rem}
+  .streak-dot{width:26px;height:26px;border-radius:50%;background:#f0e4ec;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);border:1.5px solid #e8d8e4}
+  .streak-dot.done{background:var(--green2);border-color:#6aaa60;color:#fff}
+  .streak-dot.partial{background:var(--blush2);border-color:var(--rose);color:#fff}
+  .week-sel{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+  .week-btn{padding:6px 14px;border-radius:50px;border:1.5px solid var(--blush2);background:var(--white);color:var(--rose);font-size:0.78rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all 0.2s}
+  .week-btn.active{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .affirmation{background:linear-gradient(135deg,#fdf0f5,#edf7eb);border-radius:16px;padding:0.9rem 1.25rem;text-align:center;margin-bottom:1rem;border:1px solid #f0e4ec}
+  .affirmation p{font-family:'Playfair Display',serif;font-style:italic;color:var(--rose);font-size:0.9rem}
+  .date-nav{display:flex;align-items:center;gap:8px;margin-bottom:1rem;background:var(--white);border-radius:16px;border:1px solid #f0e4ec;padding:10px 14px}
+  .date-nav button{background:none;border:1.5px solid #f0e4ec;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--rose);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s}
+  .date-nav button:hover{background:var(--blush)}
+  .date-nav input[type=date]{flex:1;border:none;background:transparent;font-family:'Poppins',sans-serif;font-size:0.88rem;font-weight:500;color:var(--text);text-align:center;outline:none;cursor:pointer}
+  .day-badge-wrap{text-align:center;margin-bottom:0.75rem}
+  .day-badge{font-size:0.72rem;color:var(--muted);padding:4px 12px;background:var(--white);border-radius:50px;border:1px solid #f0e4ec;display:inline-block}
+  .viewing-past{background:#fff8e1;border:1px solid #f0d9a0;color:#a07840;border-radius:12px;padding:8px 14px;font-size:0.78rem;margin-bottom:0.75rem;text-align:center}
+  @media(max-width:480px){.always-bar{grid-template-columns:1fr}.wt-inputs{flex-wrap:wrap}}
+</style>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>✨ Glow Up Journal</h1>
+    <p>your luxury self-care sanctuary</p>
+  </div>
+
+  <div class="always-bar">
+    <div>
+      <div class="always-label">🔥 Day Streak</div>
+      <div style="display:flex;align-items:baseline;gap:6px"><span class="streak-num" id="alwaysStreak">0</span><span class="streak-unit">days in a row</span></div>
+      <div class="sdots" id="alwaysDots"></div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-top:4px" id="streakMsg">Start logging to build your streak 🌸</div>
+    </div>
+    <div class="progress-side">
+      <div class="always-label">✨ Weight Loss Progress</div>
+      <div class="wt-inputs">
+        <div class="wt-mini"><label>Start (kg)</label><input type="number" id="startWt" step="0.1" placeholder="e.g. 70" oninput="updateProgress();saveProgressWeights()"></div>
+        <div class="wt-mini"><label>Now (kg)</label><input type="number" id="curWt" step="0.1" placeholder="e.g. 68" oninput="updateProgress();saveProgressWeights()"></div>
+        <div class="wt-mini"><label>Goal (kg)</label><input type="number" id="goalKg" step="0.5" placeholder="10" oninput="updateProgress();saveProgressWeights()"></div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"><span class="prog-pct" id="progPct">0%</span></div></div>
+      <div class="prog-msg" id="progMsg">Enter your weights to see progress 🤍</div>
+    </div>
+  </div>
+
+  <div class="affirmation"><p id="affirmText">"You are not on a diet. You are on a journey to your best self."</p></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('daily')">📅 Daily Log</button>
+    <button class="tab" onclick="showTab('weekly')">📊 Weekly</button>
+    <button class="tab" onclick="showTab('overview')">🤍 Journey</button>
+  </div>
+
+  <!-- DAILY -->
+  <div class="section active" id="tab-daily">
+    <div class="date-nav">
+      <button onclick="shiftDay(-1)">‹</button>
+      <input type="date" id="logDate" onchange="loadDay()">
+      <button onclick="shiftDay(1)">›</button>
+    </div>
+    <div class="day-badge-wrap"><span class="day-badge" id="dayBadge">Today ✨</span></div>
+    <div id="pastBanner" class="viewing-past" style="display:none">📖 Viewing a past entry — you can read or edit it and re-save 🤍</div>
+
+    <div class="card">
+      <div class="card-title"><span>✨</span> Daily Checklist</div>
+      <div class="checklist" id="checklist">
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">💚 Green juice</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🍎 Apple cider vinegar</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🍳 High-protein breakfast</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">💪 Protein in every meal</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🥗 Vegetables at lunch & dinner</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🍚 Only 1 carb at lunch</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🚫 No processed foods</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🍓 Whole fruit only</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">⚖️ Controlled portions</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🧠 Managed anxiety at school</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">☕ Pre-workout snack</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🌙 No night overeating</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><input type="checkbox"><span class="check-label">🏋️‍♀️ Workout / movement</span></div>
+      </div>
+      <div style="margin-top:12px;font-size:0.8rem;color:var(--muted)" id="checkCount">0 / 13 completed</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🍽️</span> Meals</div>
+      <div class="meal-block"><div class="meal-title">🍳 Breakfast</div><div class="meal-guide">Guide: 2 eggs + veggies. Limit cheese & processed foods.</div><textarea rows="2" placeholder="What I ate..." id="m-breakfast"></textarea></div>
+      <div class="meal-block"><div class="meal-title">🍓 Snack</div><div class="meal-guide">Guide: Greek yogurt + fruit.</div><textarea rows="2" placeholder="What I ate..." id="m-snack"></textarea></div>
+      <div class="meal-block"><div class="meal-title">🥗 Lunch</div><div class="meal-guide">Guide: Protein + veggies + 1 carb only. Eat protein first.</div><textarea rows="2" placeholder="What I ate..." id="m-lunch"></textarea></div>
+      <div class="meal-block"><div class="meal-title">☕ Pre-Workout</div><div class="meal-guide">Guide: Protein + optional coffee or fruit.</div><textarea rows="2" placeholder="What I ate..." id="m-preworkout"></textarea></div>
+      <div class="meal-block"><div class="meal-title">🌙 Dinner</div><div class="meal-guide">Guide: Light meal or skip if not hungry.</div><textarea rows="2" placeholder="What I ate..." id="m-dinner"></textarea></div>
+      <div class="meal-block"><div class="meal-title">🧠 Night Cravings</div><div class="meal-guide">Guide: Water → wait → protein if needed.</div><textarea rows="2" placeholder="What I felt / ate..." id="m-night"></textarea></div>
+    </div>
+
+    <!-- WATER BOTTLES -->
+    <div class="card">
+      <div class="card-title"><span>💧</span> Water Tracker</div>
+      <div class="water-grid" id="waterGrid"></div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:10px" id="waterCount">0 / 3 bottles</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🏋️‍♀️</span> Workout</div>
+      <span class="flabel">Select all that apply — tap to toggle</span>
+      <div class="workout-types" id="workoutTypes">
+        <div class="workout-type" data-label="🏋️ Gym" onclick="toggleWorkout(this)">🏋️ Gym</div>
+        <div class="workout-type" data-label="🏃 Cardio" onclick="toggleWorkout(this)">🏃 Cardio</div>
+        <div class="workout-type" data-label="💃 Dance" onclick="toggleWorkout(this)">💃 Dance</div>
+        <div class="workout-type" data-label="🎾 Tennis" onclick="toggleWorkout(this)">🎾 Tennis</div>
+        <div class="workout-type" data-label="🧘 Yoga" onclick="toggleWorkout(this)">🧘 Yoga</div>
+        <div class="workout-type" data-label="🌸 Rest Day" onclick="toggleWorkout(this)">🌸 Rest Day</div>
+      </div>
+      <div class="workout-hint">Tap multiple activities if you did more than one today ✨</div>
+      <div class="workout-summary" id="woSummary"></div>
+      <div class="workout-entries" id="woEntries"></div>
+      <span class="flabel" style="margin-top:12px">Sauna</span>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="sauna" value="yes"> Yes 🔥</label>
+        <label class="radio-pill"><input type="radio" name="sauna" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🧠</span> Mood & Anxiety</div>
+      <div class="mood-row">
+        <div class="mood-col"><span class="flabel">Mood (1–10)</span><input type="number" id="mood" min="1" max="10" placeholder="7"></div>
+        <div class="mood-col"><span class="flabel">Anxiety (1–10)</span><input type="number" id="anxiety" min="1" max="10" placeholder="4"></div>
+      </div>
+      <span class="flabel">Did I eat from anxiety?</span>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="anxEat" value="yes"> Yes</label>
+        <label class="radio-pill"><input type="radio" name="anxEat" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🌙</span> Night Reflection</div>
+      <span class="flabel">✨ What I did well today</span>
+      <textarea rows="2" placeholder="I'm proud of myself for..." id="didWell"></textarea>
+      <span class="flabel">✨ What I can improve tomorrow</span>
+      <textarea rows="2" placeholder="Tomorrow I will..." id="improve"></textarea>
+    </div>
+
+    <button class="save-btn" onclick="saveDay()">🤍 Save This Day's Log</button>
+  </div>
+
+  <!-- WEEKLY -->
+  <div class="section" id="tab-weekly">
+    <div class="week-sel" id="weekSel"></div>
+    <div class="card">
+      <div class="card-title"><span>📊</span> Weekly Check-In</div>
+      <div class="wt-row"><div class="wt-col"><span class="flabel">Weight (kg)</span><input type="number" step="0.1" id="wkWeight" placeholder="e.g. 68.5"></div></div>
+      <span class="flabel">Waist (cm)</span><input type="number" id="wkWaist" placeholder="e.g. 72">
+      <span class="flabel">Hips (cm)</span><input type="number" id="wkHips" placeholder="e.g. 95">
+      <span class="flabel">Legs / Thighs (cm)</span><input type="number" id="wkLegs" placeholder="e.g. 56">
+      <span class="flabel">Progress Notes</span><textarea rows="3" id="wkNotes" placeholder="How do I feel this week?"></textarea>
+      <span class="flabel">✨ Wins of the Week</span><textarea rows="2" id="wkWins" placeholder="I'm so proud that..."></textarea>
+      <button class="save-btn" onclick="saveWeek()">🌸 Save Week</button>
+    </div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="section" id="tab-overview">
+    <div class="mini-stat">
+      <div class="mini-card"><div class="val" id="statDays">0</div><div class="lbl">days logged</div></div>
+      <div class="mini-card"><div class="val" id="statAvgMood">—</div><div class="lbl">avg mood</div></div>
+      <div class="mini-card"><div class="val" id="statStreak2">0</div><div class="lbl">day streak</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📈</span> Weight Journey</div>
+      <div class="graph-area"><canvas id="wtChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🌸</span> Checklist Consistency — last 30 days</div>
+      <div class="streak-grid" id="streakGrid"></div>
+      <div style="display:flex;gap:12px;margin-top:8px;font-size:0.72rem;color:var(--muted);flex-wrap:wrap">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green2);margin-right:4px"></span>8+ done</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blush2);margin-right:4px"></span>some done</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f0e4ec;margin-right:4px"></span>not logged</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const AFFIRMATIONS=['"You are not on a diet. You are on a journey to your best self."','"Every small choice is a vote for the woman you are becoming. 🤍"','"Rest is not a reward — it is part of the process. ✨"','"You deserve to feel good in your body — not someday, but now."','"Discipline is a form of self-love. Keep showing up. 💪"','"Progress over perfection, always. You are enough. 🍃"','"This glow-up is yours. No rush, no comparison. 🌙"'];
+let affIdx=Math.floor(Math.random()*AFFIRMATIONS.length);
+document.getElementById('affirmText').textContent=AFFIRMATIONS[affIdx];
+setInterval(()=>{affIdx=(affIdx+1)%AFFIRMATIONS.length;document.getElementById('affirmText').textContent=AFFIRMATIONS[affIdx]},12000);
+
+let logData={},weekData={};
+try{const s=localStorage.getItem('glowLog');if(s)logData=JSON.parse(s)}catch(e){}
+try{const s=localStorage.getItem('glowWeek');if(s)weekData=JSON.parse(s)}catch(e){}
+
+// ── LOAD & SAVE PROGRESS WEIGHTS (persisted separately) ──
+function loadProgressWeights(){
+  try{
+    const p=JSON.parse(localStorage.getItem('glowProgress')||'{}');
+    if(p.start)document.getElementById('startWt').value=p.start;
+    if(p.cur)document.getElementById('curWt').value=p.cur;
+    if(p.goal)document.getElementById('goalKg').value=p.goal;
+  }catch(e){}
+  updateProgress();
+}
+function saveProgressWeights(){
+  localStorage.setItem('glowProgress',JSON.stringify({
+    start:document.getElementById('startWt').value,
+    cur:document.getElementById('curWt').value,
+    goal:document.getElementById('goalKg').value
+  }));
+}
+function updateProgress(){
+  const s=parseFloat(document.getElementById('startWt').value)||0;
+  const c=parseFloat(document.getElementById('curWt').value)||0;
+  const g=parseFloat(document.getElementById('goalKg').value)||10;
+  const lost=Math.max(0,s-c);
+  const pct=Math.min(100,Math.round((lost/g)*100));
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progMsg').textContent=lost<=0?'Enter your weights to see progress 🤍':pct>=100?'🎉 Goal reached! You are INCREDIBLE! 🤍':'Lost '+lost.toFixed(1)+' kg — keep going, you\'re getting closer 🤍';
+}
+loadProgressWeights();
+
+const todayStr=()=>new Date().toISOString().split('T')[0];
+const dateInput=document.getElementById('logDate');
+dateInput.value=todayStr();
+
+function shiftDay(delta){
+  const d=new Date(dateInput.value+'T12:00:00');d.setDate(d.getDate()+delta);
+  dateInput.value=d.toISOString().split('T')[0];loadDay();
+}
+function updateDayBadge(){
+  const v=dateInput.value,t=todayStr();
+  const badge=document.getElementById('dayBadge'),banner=document.getElementById('pastBanner');
+  if(v===t){badge.textContent='Today ✨';banner.style.display='none'}
+  else{const diff=Math.round((new Date(t)-new Date(v))/(864e5));diff>0?(badge.textContent=diff===1?'Yesterday':''+diff+' days ago',banner.style.display='block'):(badge.textContent='Future day 🌙',banner.style.display='none')}
+}
+
+// ── WATER BOTTLES SVG ──
+let waterState=Array(3).fill(false);
+function bottleSVG(filled){
+  const water=filled?'#7ec8e3':'none';
+  const waterStroke=filled?'#5bb5d5':'none';
+  return `<svg viewBox="0 0 44 80" width="44" height="80" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="2" width="16" height="8" rx="3" fill="#e0f0f8" stroke="#b8dff5" stroke-width="1.5"/>
+    <path d="M8 18 Q8 12 14 12 L30 12 Q36 12 36 18 L38 68 Q38 76 30 76 L14 76 Q6 76 6 68 Z" fill="${filled?'#d0f0fb':'#f0f8ff'}" stroke="#b8dff5" stroke-width="1.5"/>
+    ${filled?`<path d="M8 42 Q8 42 14 42 L30 42 Q36 42 38 45 L38 68 Q38 76 30 76 L14 76 Q6 76 6 68 Z" fill="${water}" stroke="${waterStroke}" stroke-width="0"/>
+    <ellipse cx="22" cy="42" rx="14" ry="3" fill="#a8e4f5" opacity="0.7"/>` : ''}
+    <path d="M8 18 Q8 12 14 12 L30 12 Q36 12 36 18 L38 68 Q38 76 30 76 L14 76 Q6 76 6 68 Z" fill="none" stroke="#b8dff5" stroke-width="1.5"/>
+    <line x1="10" y1="32" x2="34" y2="32" stroke="#d0e8f0" stroke-width="1" opacity="0.6"/>
+    <line x1="9" y1="52" x2="35" y2="52" stroke="#d0e8f0" stroke-width="1" opacity="0.6"/>
+  </svg>`;
+}
+function buildWater(){
+  const wg=document.getElementById('waterGrid');wg.innerHTML='';
+  waterState.forEach((filled,i)=>{
+    const wrap=document.createElement('div');wrap.className='bottle-wrap';
+    wrap.innerHTML=`<div class="bottle" id="bottle-${i}">${bottleSVG(filled)}</div><span class="bottle-label">Bottle ${i+1}</span>`;
+    wrap.onclick=()=>{waterState[i]=!waterState[i];document.getElementById('bottle-'+i).innerHTML=bottleSVG(waterState[i]);document.getElementById('waterCount').textContent=waterState.filter(Boolean).length+' / 3 bottles'};
+    wg.appendChild(wrap);
+  });
+  document.getElementById('waterCount').textContent=waterState.filter(Boolean).length+' / 3 bottles';
+}
+buildWater();
+
+function toggleCheck(el){
+  const cb=el.querySelector('input[type=checkbox]');cb.checked=!cb.checked;el.classList.toggle('done',cb.checked);
+  document.getElementById('checkCount').textContent=document.querySelectorAll('#checklist .check-item.done').length+' / 13 completed';
+}
+
+// ── WORKOUT MULTI-SELECT ──
+let selectedWorkouts=new Set();
+function toggleWorkout(el){
+  const label=el.dataset.label;
+  if(label==='🌸 Rest Day'){
+    if(el.classList.contains('sel')){el.classList.remove('sel');selectedWorkouts.delete(label)}
+    else{document.querySelectorAll('.workout-type').forEach(e=>{e.classList.remove('sel');selectedWorkouts.delete(e.dataset.label)});el.classList.add('sel');selectedWorkouts.add(label)}
+  }else{
+    const rb=document.querySelector('.workout-type[data-label="🌸 Rest Day"]');
+    if(rb){rb.classList.remove('sel');selectedWorkouts.delete('🌸 Rest Day')}
+    el.classList.contains('sel')?(el.classList.remove('sel'),selectedWorkouts.delete(label)):(el.classList.add('sel'),selectedWorkouts.add(label));
+  }
+  updateWoEntries();
+}
+function updateWoEntries(){
+  const arr=Array.from(selectedWorkouts);
+  document.getElementById('woSummary').textContent=arr.join('  ·  ');
+  const existing={};document.querySelectorAll('.workout-entry').forEach(e=>{existing[e.dataset.key]=e.querySelector('input').value});
+  const cont=document.getElementById('woEntries');cont.innerHTML='';
+  arr.forEach(label=>{
+    const div=document.createElement('div');div.className='workout-entry';div.dataset.key=label;
+    const lbl=document.createElement('div');lbl.className='workout-entry-label';lbl.textContent=label;
+    const inp=document.createElement('input');inp.type='text';inp.placeholder='Duration, e.g. 45 min';inp.value=existing[label]||'';
+    div.appendChild(lbl);div.appendChild(inp);cont.appendChild(div);
+  });
+}
+
+// ── LOAD DAY ──
+function loadDay(){
+  const dt=dateInput.value;updateDayBadge();
+  const d=logData[dt]||{};
+  const items=document.querySelectorAll('#checklist .check-item');
+  const checks=d.checks||Array(13).fill(false);
+  items.forEach((el,i)=>{const cb=el.querySelector('input[type=checkbox]');cb.checked=!!checks[i];el.classList.toggle('done',cb.checked)});
+  document.getElementById('checkCount').textContent=checks.filter(Boolean).length+' / 13 completed';
+  ['breakfast','snack','lunch','preworkout','dinner','night'].forEach(k=>{document.getElementById('m-'+k).value=(d.meals&&d.meals[k])||''});
+  waterState=d.water||Array(3).fill(false);
+  buildWater();
+  selectedWorkouts=new Set(d.workouts||[]);
+  document.querySelectorAll('.workout-type').forEach(el=>el.classList.toggle('sel',selectedWorkouts.has(el.dataset.label)));
+  const savedDur=d.woDurations||{};updateWoEntries();
+  document.querySelectorAll('.workout-entry').forEach(e=>{e.querySelector('input').value=savedDur[e.dataset.key]||''});
+  const sv=d.sauna||'';document.querySelectorAll('input[name=sauna]').forEach(r=>{r.checked=r.value===sv});
+  document.getElementById('mood').value=d.mood||'';
+  document.getElementById('anxiety').value=d.anxiety||'';
+  const av=d.anxEat||'';document.querySelectorAll('input[name=anxEat]').forEach(r=>{r.checked=r.value===av});
+  document.getElementById('didWell').value=d.didWell||'';
+  document.getElementById('improve').value=d.improve||'';
+}
+loadDay();
+
+// ── SAVE DAY ──
+function saveDay(){
+  const dt=dateInput.value;
+  const checks=Array.from(document.querySelectorAll('#checklist input[type=checkbox]')).map(c=>c.checked);
+  const meals={};['breakfast','snack','lunch','preworkout','dinner','night'].forEach(k=>{meals[k]=document.getElementById('m-'+k).value});
+  const woDurations={};document.querySelectorAll('.workout-entry').forEach(e=>{woDurations[e.dataset.key]=e.querySelector('input').value});
+  logData[dt]={checks,meals,water:[...waterState],workouts:Array.from(selectedWorkouts),woDurations,sauna:document.querySelector('input[name=sauna]:checked')?.value||'',mood:document.getElementById('mood').value,anxiety:document.getElementById('anxiety').value,anxEat:document.querySelector('input[name=anxEat]:checked')?.value||'',didWell:document.getElementById('didWell').value,improve:document.getElementById('improve').value};
+  localStorage.setItem('glowLog',JSON.stringify(logData));
+  updateAlwaysStreak();
+  showToast('Saved! 🤍 '+(dt===todayStr()?'You showed up for yourself today':'Entry updated'));
+}
+
+// ── STREAK ──
+function computeStreak(){
+  const t=new Date();let cur=0;
+  for(let i=0;i<60;i++){const d=new Date(t);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];if(logData[k]){cur++}else{if(i===0)continue;break}}
+  return cur;
+}
+function updateAlwaysStreak(){
+  const s=computeStreak();document.getElementById('alwaysStreak').textContent=s;
+  document.getElementById('streakMsg').textContent=s===0?'Start logging to build your streak 🌸':s<3?'Great start! Keep showing up 🌸':s<7?'You\'re building momentum! 🔥':'You\'re on fire! '+s+' days strong 🔥✨';
+  const t=new Date();const dots=document.getElementById('alwaysDots');dots.innerHTML='';
+  for(let i=6;i>=0;i--){const d=new Date(t);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const el=document.createElement('div');el.className='sdot';if(logData[k]){const done=logData[k].checks?logData[k].checks.filter(Boolean).length:0;el.classList.add(done>=8?'done':'partial')}dots.appendChild(el)}
+}
+updateAlwaysStreak();
+
+// ── TABS ──
+function showTab(t){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelectorAll('.tab').forEach(b=>{if(b.getAttribute('onclick').includes("'"+t+"'"))b.classList.add('active')});
+  if(t==='overview')renderOverview();
+}
+
+// ── WEEKLY ──
+const ws=document.getElementById('weekSel');
+for(let i=1;i<=12;i++){const b=document.createElement('button');b.className='week-btn';b.textContent='Week '+i;b.onclick=()=>{document.querySelectorAll('.week-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');loadWeek('Week '+i)};ws.appendChild(b)}
+ws.firstChild&&ws.firstChild.classList.add('active');
+function loadWeek(wk){const d=weekData[wk]||{};document.getElementById('wkWeight').value=d.weight||'';document.getElementById('wkWaist').value=d.waist||'';document.getElementById('wkHips').value=d.hips||'';document.getElementById('wkLegs').value=d.legs||'';document.getElementById('wkNotes').value=d.notes||'';document.getElementById('wkWins').value=d.wins||''}
+function saveWeek(){
+  const wk=document.querySelector('.week-btn.active');if(!wk)return showToast('Select a week first 🌸');
+  const wkNum=wk.textContent;
+  weekData[wkNum]={weight:document.getElementById('wkWeight').value,waist:document.getElementById('wkWaist').value,hips:document.getElementById('wkHips').value,legs:document.getElementById('wkLegs').value,notes:document.getElementById('wkNotes').value,wins:document.getElementById('wkWins').value};
+  localStorage.setItem('glowWeek',JSON.stringify(weekData));showToast('Week saved! 🌸');
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// ── JOURNEY ──
+let wtChart=null;
+function renderOverview(){
+  const days=Object.keys(logData).sort();
+  document.getElementById('statDays').textContent=days.length;
+  const moods=days.map(d=>parseFloat(logData[d].mood)).filter(m=>!isNaN(m));
+  document.getElementById('statAvgMood').textContent=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):'—';
+  document.getElementById('statStreak2').textContent=computeStreak();
+  const wkKeys=Array.from({length:12},(_,i)=>'Week '+(i+1));
+  const wkWeights=wkKeys.map(k=>weekData[k]&&weekData[k].weight?parseFloat(weekData[k].weight):null);
+  const labels=wkKeys.filter((_,i)=>wkWeights[i]!==null);
+  const vals=wkWeights.filter(v=>v!==null);
+  const ctx=document.getElementById('wtChart').getContext('2d');
+  if(wtChart)wtChart.destroy();
+  wtChart=new Chart(ctx,{type:'line',data:{labels:vals.length?labels:['No data yet'],datasets:[{label:'Weight (kg)',data:vals.length?vals:[null],borderColor:'#d4829a',backgroundColor:'rgba(212,130,154,0.1)',borderWidth:2.5,pointBackgroundColor:'#d4829a',pointRadius:5,tension:0.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'Poppins',size:11},color:'#9a8a96'}},x:{grid:{display:false},ticks:{font:{family:'Poppins',size:11},color:'#9a8a96'}}}}});
+  const sg=document.getElementById('streakGrid');sg.innerHTML='';const tn=new Date();
+  for(let i=29;i>=0;i--){const d=new Date(tn);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const el=document.createElement('div');el.className='streak-dot';el.title=k;if(logData[k]){const done=logData[k].checks?logData[k].checks.filter(Boolean).length:0;el.classList.add(done>=8?'done':'partial');el.textContent=done}else{el.textContent=d.getDate()}sg.appendChild(el)}
+}
+</script>
